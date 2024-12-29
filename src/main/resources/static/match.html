@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>匹配查询 - 配对系统</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <nav class="navbar">
+        <h1>配对系统 - 匹配查询</h1>
+        <a href="register.html" class="nav-link">返回注册页面</a>
+    </nav>
+
+    <div class="container">
+        <div class="query-section">
+            <div class="query-form">
+                <div class="form-group">
+                    <label>您的编号</label>
+                    <input v-model="queryForm.number" required
+                           pattern="\d{2}" maxlength="2"
+                           placeholder="请输入您的编号">
+                </div>
+
+                <div class="form-group">
+                    <label>您的性别</label>
+                    <select v-model="queryForm.gender" required>
+                        <option value="1">男</option>
+                        <option value="0">女</option>
+                    </select>
+                </div>
+
+                <div class="tabs">
+                    <button type="button"
+                            :class="{ active: activeTab === 'interested' }"
+                            @click="switchTab('interested')">
+                        我感兴趣的已注册用户
+                    </button>
+                    <button type="button"
+                            :class="{ active: activeTab === 'interests' }"
+                            @click="switchTab('interests')">
+                        对我感兴趣的已注册用户
+                    </button>
+                    <button type="button"
+                            :class="{ active: activeTab === 'mutual' }"
+                            @click="switchTab('mutual')">
+                        互相感兴趣的已注册用户
+                    </button>
+                </div>
+            </div>
+
+            <div class="result-section" v-if="queryResults.length > 0">
+                <div class="user-grid">
+                    <div v-for="user in queryResults" :key="user.number" class="user-card">
+                        <h3>{{ user.name }}</h3>
+                        <p>编号: {{ user.number }}</p>
+                        <p>性别: {{ user.gender === 1 ? '男' : '女' }}</p>
+                        <p>手机号: {{ formatPhone(user.phone) }}</p>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="empty-state">
+                暂无匹配结果
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/match.js"></script>
+</body>
+</html>
